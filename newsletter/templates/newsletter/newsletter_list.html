@@ -1,0 +1,32 @@
+{% extends 'newsletter/client_personal_account.html' %}
+{% block content2 %}
+<div class="row mb-4">
+            <div class="col-md-12">
+                <div class="h-100 p-5 bg-body-tertiary rounded-3">
+                    <h2>Статистика рассылок</h2>
+                    <p>Просматривайте статистику по отправленным и запланированным рассылкам.</p>
+                    <button class="btn btn-primary mb-4" type="button">Добавить сообщение</button>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Название рассылки</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Дата отправки</th>
+                            <th scope="col">Количество отправленных</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Пример записи, которую можно заменить данными из базы -->
+                        <tr>
+                            <td>Новости компании</td>
+                            <td>Завершена</td>
+                            <td>20 сентября 2024</td>
+                            <td>150</td>
+                        </tr>
+                        <!-- Пример записи конец -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}

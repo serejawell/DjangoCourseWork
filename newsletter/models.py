@@ -4,75 +4,67 @@ from django.utils import timezone
 from newsletter.utils import should_run_task
 
 
-class User(models.Model):
-    '''Модель пользователя представляет собой контактные данные о человеке, который должен будет получить сообщение'''
-    full_name = models.CharField(
+class Client(models.Model):
+    '''Модель клиента представляет собой контактные данные о человеке, который должен будет отправлять рассылки'''
+    first_name = models.CharField(
         max_length=50,
-        verbose_name='ФИО Пользователя',
-        help_text='Введите полное имя пользователя', )
+        verbose_name='Имя клиента',
+    )
+    last_name = models.CharField(
+        max_length=50,
+        verbose_name='Фамилия клиента',
+    )
+    middle_name = models.CharField(
+        max_length=50,
+        verbose_name='Отчество клиента',
+    )
     email = models.EmailField(
         unique=True,
         verbose_name='Email'
     )
-
-    def __str__(self):
-        return (f'{self.name} ({self.email})')
-
-    class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
-
-
-class Company(models.Model):
-    '''Модель компании сделана исключительно в индивидуальных целях и далее будет дополняться.
-    в этой модели создается название организации для дальнейшей фильтрации (если клиентов из данной организации будет
-    не 1 а более'''
-    name = models.CharField(
-        max_length=50,
-        verbose_name='название организации',
+    created_at = models.DateField(
+        auto_now_add=True,
+        verbose_name='дата создания'
     )
-    link = models.CharField(
-        max_length=50,
-        verbose_name='сайт компании',
+    comment = models.TextField(
+        verbose_name='комментарий',
         blank=True,
         null=True
     )
 
     def __str__(self):
-        return (f'{self.name}')
+        return (f'{self.last_name} {self.first_name} {self.middle_name} ({self.email})\n{self.comment}')
 
     class Meta:
-        verbose_name = 'компания'
-        verbose_name_plural = 'компании'
+        verbose_name = 'клиент'
+        verbose_name_plural = 'клиенты'
 
 
-class Client(models.Model):
-    '''Модель клиента содержит в себе ФИО клиента, почту, компанию и комментарий'''
-    full_name = models.CharField(
+class User(models.Model):
+    '''Модель пользователя содержит в себе ФИО, почту'''
+    first_name = models.CharField(
         max_length=50,
-        verbose_name='фио клиента',
-        help_text='Введите полное имя клиента'
+        verbose_name='фио пользоватея',
+    )
+    last_name = models.CharField(
+        max_length=50,
+        verbose_name='Фамилия пользователя',
+    )
+    middle_name = models.CharField(
+        max_length=50,
+        verbose_name='Отчество пользователя',
     )
     email = models.EmailField(
         unique=True,
         verbose_name='Email'
     )
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        verbose_name='компания',
-        help_text='Введите название организации'
-    )
-    comment = models.TextField(
-        verbose_name='комментарий'
-    )
 
     def __str__(self):
-        return (f'{self.name} ({self.email}\n{self.comment})')
+        return (f'{self.last_name} {self.name} {self.middle_name} ({self.email})')
 
     class Meta:
-        verbose_name = 'клиент'
-        verbose_name_plural = 'клиенты'
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
 
 
 class Message(models.Model):
@@ -107,6 +99,7 @@ class Newsletter(models.Model):
         ('month', 'Раз в месяц'),
     ]
     created_at = models.DateTimeField(
+        auto_now_add=True,
         verbose_name='Дата создания'
     )
     scheduled_at = models.DateTimeField(
@@ -126,6 +119,13 @@ class Newsletter(models.Model):
         choices=STATUS_CHOICES,
         default='created'
     )
+
+    def __str__(self):
+        return (f'ID: {self.id} Дата отправки: {self.scheduled_at} Статуc: {self.status}')
+
+    class Meta:
+        verbose_name = 'рассылка'
+        verbose_name_plural = 'рассылки'
 
     def should_run(self):
         '''Функция позволяет запускать рассылку с переодичностью в день\неделю\месяц'''
