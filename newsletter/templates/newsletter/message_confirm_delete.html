@@ -42,9 +42,9 @@
     <div class="row mb-4">
         <div class="col-md-8 offset-md-2">
             <div class="h-100 p-5 bg-body-tertiary rounded-3">
-                <h2>Удаление пользователя</h2>
-                <p>Вы уверены, что хотите удалить пользователя <strong>{{ client.first_name }} {{ client.last_name }}</strong>?</p>
-                <p>Email: <strong>{{ client.email }}</strong></p>
+                <h2>Удаление сообщения</h2>
+                <p>Вы уверены, что хотите удалить сообщение с темой:<br> <strong>{{ message.title }}</strong>?</p>
+                <p>Сообщение: <strong>{{ message.message }}</strong></p>
 
                 <form method="POST">
                     {% csrf_token %}

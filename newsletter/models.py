@@ -98,6 +98,7 @@ class Newsletter(models.Model):
         ('week', 'Раз в неделю'),
         ('month', 'Раз в месяц'),
     ]
+
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='Дата создания'
@@ -105,19 +106,30 @@ class Newsletter(models.Model):
     scheduled_at = models.DateTimeField(
         verbose_name='Дата отправки'
     )
-
     periodicity = models.CharField(
         max_length=10,
-        choices=PERIOD_CHOICES
+        choices=PERIOD_CHOICES,
+        verbose_name='Переодичность',
     )
     last_run = models.DateTimeField(
         null=True,
-        blank=True
+        blank=True,
+        verbose_name='Последний запуск',
     )
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default='created'
+        default='created',
+        verbose_name='Статус',
+    )
+    message = models.ForeignKey(
+        Message,
+        on_delete=models.CASCADE,
+        verbose_name='Сообщение',
+    )
+    clients = models.ManyToManyField(
+        Client,
+        verbose_name='Клиенты',
     )
 
     def __str__(self):
@@ -126,6 +138,7 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+
 
     def should_run(self):
         '''Функция позволяет запускать рассылку с переодичностью в день\неделю\месяц'''

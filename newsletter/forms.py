@@ -1,12 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
+from .models import Newsletter
 
-class UserForm(forms.ModelForm):
-    first_name = forms.CharField(label="Имя", max_length=100)
-    last_name = forms.CharField(label="Фамилия", max_length=100)
-    middle_name = forms.CharField(label="Отчество", max_length=100, required=False)
-    email = forms.EmailField(label="Email", max_length=150)
-
+class NewsletterForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'middle_name', 'email']
+        model = Newsletter
+        fields = ['message', 'scheduled_at', 'periodicity', 'clients']
+        widgets = {
+            'scheduled_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

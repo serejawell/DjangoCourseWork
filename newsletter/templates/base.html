@@ -185,14 +185,14 @@
                 <div class="h-100 p-5 text-bg-dark rounded-3">
                     <h2>Добавляйте клиентов</h2>
                     <p>Добавление данных клиентов: Возможность легко импортировать списки получателей с контактными данными для дальнейшей отправки сообщений.</p>
-                    <a href="{% url 'newsletter:personal_account_overview' %}" class="btn btn-outline-light" type="button">Добавить</a>
+                    <a href="{% url 'newsletter:client_create' %}" class="btn btn-outline-light" type="button">Добавить</a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="h-100 p-5 text-bg-dark rounded-3">
                     <h2>Создайте сообщение</h2>
                     <p>Создание и настройка рассылок: Создавайте индивидуальные рассылки с уникальным контентом, настраивайте их внешний вид и содержание.</p>
-                    <button class="btn btn-outline-light" type="button">Создать</button>
+                    <a href="{% url 'newsletter:message_create' %}" class="btn btn-outline-light" type="button">Создать</a>
                 </div>
             </div>
         </div>
@@ -205,7 +205,7 @@
                     данные подписчиков), создавать рассылки и настраивать их периодичность. Благодаря гибкой системе
                     настройки, можно запланировать как одноразовые сообщения, так и регулярные рассылки, отправляемые по
                     заданному графику (ежедневно, еженедельно, ежемесячно и т.д.)</p>
-                <button class="btn btn-primary btn-lg mt-5" type="button">Создать рассылку</button>
+                <a href="{% url 'newsletter:personal_account_overview' %}" class="btn btn-primary btn-lg mt-5" type="button">Перейти в кабинет</a>
             </div>
         </div>
 
