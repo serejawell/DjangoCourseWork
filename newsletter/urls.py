@@ -1,6 +1,3 @@
-from newsletter.forms import NewsletterForm
-from newsletter.models import User, Client, Message, Newsletter
-from newsletter.models import Newsletter
 from django.urls import path
 from newsletter.apps import NewsletterConfig
 from newsletter.views import index_view, ClientListView, ClientCreateView, ClientUpdateView, ClientDeleteView, \

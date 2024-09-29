@@ -70,8 +70,8 @@
                     <td class="fw-semibold">{{ newsletter.message.title|slice:":20" }}...</td>
                     <td>{{ newsletter.scheduled_at }}</td>
                     <td>{{ newsletter.last_run }}</td>
-                    <td>{{ newsletter.periodicity }}</td>
-                    <td>{{ newsletter.status }}</td>
+                    <td>{{ newsletter.get_periodicity_display }}</td>
+                    <td>{{ newsletter.get_status_display }}</td>
                     <td>
                         <div class="table-actions">
                             <a class="btn btn-outline-primary btn-sm"

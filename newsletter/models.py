@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.mail import send_mail
 
 from newsletter.utils import should_run_task
 
@@ -132,6 +133,7 @@ class Newsletter(models.Model):
         verbose_name='Клиенты',
     )
 
+
     def __str__(self):
         return (f'ID: {self.id} Дата отправки: {self.scheduled_at} Статуc: {self.status}')
 
@@ -139,15 +141,10 @@ class Newsletter(models.Model):
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
 
+def send_newsletter(newsletter):
+    subject = newsletter.message.title
+    message = newsletter.message.message
+    from_email = 'sev231613@gmail.com'  # Укажите свой email
+    recipient_list = [client.email for client in newsletter.clients.all()]  # Список email всех клиентов
 
-    def should_run(self):
-        '''Функция позволяет запускать рассылку с переодичностью в день\неделю\месяц'''
-        if self.last_run:
-            return should_run_task(self.last_run, self.periodicity)
-        return True
-
-    def can_send(self):
-        '''Функция позволяет проверить актуальность даты. Отправляет, если выбранная дата не в прошлом.'''
-        if self.scheduled_at > timezone.now() and self.status == 'created':
-            return True
-        return False
+    send_mail(subject, message, from_email, recipient_list)

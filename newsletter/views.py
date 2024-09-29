@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
 from newsletter.forms import NewsletterForm
-from newsletter.models import Client, Message, Newsletter
+from newsletter.models import Client, Message, Newsletter, send_newsletter
 
 
 def index_view(request):
@@ -82,3 +82,4 @@ class MessageUpdateView(UpdateView):
 class MessageDeleteView(DeleteView):
     model = Message
     success_url = reverse_lazy('newsletter:personal_account_overview')
+
