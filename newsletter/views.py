@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
-from newsletter.forms import NewsletterForm
+from newsletter.forms import NewsletterForm, ClientForm
 from newsletter.models import Client, Message, Newsletter, send_newsletter
 
 
@@ -28,13 +28,13 @@ class ClientListView(ListView):
 
 class ClientCreateView(CreateView):
     model = Client
-    fields = ('last_name', 'first_name', 'middle_name', 'email')
+    form_class = ClientForm
     success_url = reverse_lazy('newsletter:personal_account_overview')
 
 
 class ClientUpdateView(UpdateView):
     model = Client
-    fields = ('last_name', 'first_name', 'middle_name', 'email')
+    form_class = ClientForm
     success_url = reverse_lazy('newsletter:personal_account_overview')
 
 

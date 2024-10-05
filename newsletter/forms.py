@@ -1,5 +1,14 @@
 from django import forms
-from .models import Newsletter
+from .models import Newsletter, Client
+
+
+class StyleFormMixin:
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
 
 class NewsletterForm(forms.ModelForm):
     class Meta:
@@ -8,3 +17,16 @@ class NewsletterForm(forms.ModelForm):
         widgets = {
             'scheduled_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
+class ClientForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ('first_name', 'last_name', 'email',)
+
+    def clean_email(self):
+        clean_data = self.cleaned_data['email']
+
+        if 'sky.pro' not in clean_data:
+            raise forms.ValidationError('Почта должна относиться к учебному заведению')
+        return clean_data

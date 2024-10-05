@@ -14,7 +14,7 @@
 
             <form method="post">
                 {% csrf_token %}
-                {{ form|add_class_to_fields:"form-control" }}
+                {{ form }}
                 {% if object %}
                 <button type="submit" class="btn btn-primary mt-3">Редактировать</button>
                 {% else %}
