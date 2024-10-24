@@ -10,7 +10,7 @@
             <table class="table mt-4">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">Имя</th>
+                    <th scope="col">ФИО</th>
                     <th scope="col">Email</th>
                     <th scope="col">Дата добавления</th>
                     <th scope="col">Действия</th>
@@ -24,6 +24,9 @@
                     <td>{{ client.created_at }}</td>
                     <td>
                         <div class="table-actions">
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="{% url 'newsletter:client_detail' client.pk %}"
+                               role="button">Посмотреть</a>
                             <a class="btn btn-outline-secondary btn-sm"
                                href="{% url 'newsletter:client_update' client.pk %}"
                                role="button">Редактировать</a>
@@ -118,12 +121,16 @@
                 <tbody>
                 {% for message in message_list %}
                 <tr>
-                    <td class="fw-semibold">{{ message.title|slice:":20" }}...</td>
-                    <td>{{ message.message|slice:":80" }}...</td>
+                    <td class="fw-semibold">{{ message.title|slice:":25" }}...</td>
+                    <td>{{ message.message|slice:":50" }}...</td>
                     <td>
                         <div class="table-actions">
+                            <a class="btn btn-outline-primary btn-sm"
+                               href="{% url 'newsletter:message_detail' message.pk %}"
+                               role="button">Посмотреть</a>
                             <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'newsletter:message_update' message.pk %}" role="button">Редактировать</a>
+                               href="{% url 'newsletter:message_update' message.pk %}"
+                               role="button">Редактировать</a>
                             <a class="btn btn-outline-danger btn-sm"
                                href="{% url 'newsletter:message_delete' message.pk %}"
                                role="button">Удалить</a>

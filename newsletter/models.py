@@ -6,7 +6,7 @@ from newsletter.utils import should_run_task
 
 
 class Client(models.Model):
-    '''Модель клиента представляет собой контактные данные о человеке, который должен будет отправлять рассылки'''
+    '''Модель клиента представляет собой контактные данные о человеке, который должен будет получать рассылки'''
     first_name = models.CharField(
         max_length=50,
         verbose_name='Имя клиента',
@@ -42,7 +42,7 @@ class Client(models.Model):
 
 
 class User(models.Model):
-    '''Модель пользователя содержит в себе ФИО, почту'''
+    '''Модель пользователя (тот, кто отправляет рассылку) содержит в себе ФИО, почту'''
     first_name = models.CharField(
         max_length=50,
         verbose_name='фио пользоватея',
@@ -141,10 +141,37 @@ class Newsletter(models.Model):
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
 
-def send_newsletter(newsletter):
-    subject = newsletter.message.title
-    message = newsletter.message.message
-    from_email = 'sev231613@gmail.com'  # Укажите свой email
-    recipient_list = [client.email for client in newsletter.clients.all()]  # Список email всех клиентов
 
-    send_mail(subject, message, from_email, recipient_list)
+class NewsletterAttempt(models.Model):
+    STATUS_CHOICES = [
+        ('success', 'Успешно'),
+        ('failure', 'Неуспешно'),
+    ]
+
+    newsletter = models.ForeignKey(
+        Newsletter,
+        on_delete=models.CASCADE,
+        verbose_name='Рассылка',
+        related_name='attempts'
+    )
+    attempt_date = models.DateTimeField(
+        default=timezone.now,
+        verbose_name='Дата и время попытки'
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        verbose_name='Статус попытки'
+    )
+    server_response = models.TextField(
+        verbose_name='Ответ почтового сервера',
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return f'Рассылка {self.newsletter.id} - {self.get_status_display()} - {self.attempt_date}'
+
+    class Meta:
+        verbose_name = 'Попытка рассылки'
+        verbose_name_plural = 'Попытки рассылок'

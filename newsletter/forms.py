@@ -22,7 +22,7 @@ class NewsletterForm(forms.ModelForm):
 class ClientForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Client
-        fields = ('first_name', 'last_name', 'email',)
+        fields = ('first_name', 'last_name', 'middle_name','email',)
 
     def clean_email(self):
         clean_data = self.cleaned_data['email']
