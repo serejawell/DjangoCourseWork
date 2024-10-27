@@ -1,8 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.core.mail import send_mail
-
-from newsletter.utils import should_run_task
 
 
 class Client(models.Model):
@@ -41,27 +38,8 @@ class Client(models.Model):
         verbose_name_plural = 'клиенты'
 
 
-class User(models.Model):
-    '''Модель пользователя (тот, кто отправляет рассылку) содержит в себе ФИО, почту'''
-    first_name = models.CharField(
-        max_length=50,
-        verbose_name='фио пользоватея',
-    )
-    last_name = models.CharField(
-        max_length=50,
-        verbose_name='Фамилия пользователя',
-    )
-    middle_name = models.CharField(
-        max_length=50,
-        verbose_name='Отчество пользователя',
-    )
-    email = models.EmailField(
-        unique=True,
-        verbose_name='Email'
-    )
-
     def __str__(self):
-        return (f'{self.last_name} {self.name} {self.middle_name} ({self.email})')
+        return (f'{self.last_name} {self.first_name} {self.middle_name} ({self.email})')
 
     class Meta:
         verbose_name = 'пользователь'

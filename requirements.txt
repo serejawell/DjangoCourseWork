@@ -1,6 +1,6 @@
 APScheduler==3.10.4
 asgiref==3.8.1
-Django==5.1.1
+Django==4.2.2
 django-apscheduler==0.7.0
 django-crontab==0.7.1
 pillow==10.4.0

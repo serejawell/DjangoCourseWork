@@ -8,7 +8,7 @@ from newsletter.models import Client, Message, Newsletter
 
 
 def index_view(request):
-    return render(request, 'base.html')
+    return render(request, 'newsletter/base_welcome.html')
 
 
 class PersonalAccountOverviewView(TemplateView):

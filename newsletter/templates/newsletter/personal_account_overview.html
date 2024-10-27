@@ -1,150 +1,125 @@
-{% extends 'newsletter/client_personal_account.html' %}
-{% block content %}
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="h-100 p-5 bg-body-tertiary rounded-3">
-            <h2>Управление клиентами</h2>
-            <p>Здесь вы можете добавлять, редактировать и удалять данные клиентов для рассылок.</p>
-            <a href="{% url 'newsletter:client_create' %}" class="btn btn-primary" type="button">Добавить клиента</a>
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <script src="{% static 'js/color-modes.js' %}"></script>
 
-            <table class="table mt-4">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">ФИО</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Дата добавления</th>
-                    <th scope="col">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for client in client_list %}
-                <tr>
-                    <td>{{ client.last_name }} {{ client.first_name }} {{ client.middle_name }}</td>
-                    <td>{{ client.email }}</td>
-                    <td>{{ client.created_at }}</td>
-                    <td>
-                        <div class="table-actions">
-                            <a class="btn btn-outline-primary btn-sm"
-                               href="{% url 'newsletter:client_detail' client.pk %}"
-                               role="button">Посмотреть</a>
-                            <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'newsletter:client_update' client.pk %}"
-                               role="button">Редактировать</a>
-                            <a class="btn btn-outline-danger btn-sm"
-                               href="{% url 'newsletter:client_delete' client.pk %}"
-                               role="button">Удалить</a>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">Нет клиентов.</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Serega Agency">
+    <title>Личный кабинет - Serega Agency</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-actions .btn {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    {% if user.is_authenticated %}
+    <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom d-flex justify-content-between align-items-center">
+            <a href="{% url 'newsletter:personal_account_overview' %}"
+               class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                <span class="fs-4">Serega Agency</span>
+            </a>
+            <div class="btn btn-group">
+                <a href="{% url 'newsletter:client_list' %}" class="btn btn-outline-primary">Клиенты</a>
+                <a href="{% url 'newsletter:message_list' %}" class="btn btn-outline-primary">Сообщения</a>
+                <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-outline-primary">Рассылки</a>
+            </div>
+            <div class="btn btn-group">
+                <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Мой профиль</a>
+            </div>
+        </header>
+        {% else %}
+        <header class="pb-3 mb-4 border-bottom d-flex justify-content-between align-items-center">
+            <a href="{% url 'newsletter:personal_account_overview' %}"
+               class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                <span class="fs-4">Serega Agency</span>
+            </a>
+        </header>
+        {% endif %}
+
+
+        {% block content2 %}
+        {% endblock %}
+        {% block content3 %}
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+
+        <footer class="pt-3 mt-4 text-body-secondary border-top">
+            &copy; 2024 Serega Agency
+        </footer>
     </div>
-</div>
-{% endblock %}
+</main>
 
-{% block content2 %}
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="h-100 p-5 bg-body-tertiary rounded-3">
-            <h2>Статистика рассылок</h2>
-            <p>Просматривайте статистику по отправленным и запланированным рассылкам.</p>
-            <a href="{% url 'newsletter:newsletter_create' %}" class="btn btn-primary mb-4" type="button">Добавить
-                рассылку</a>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Тема сообщения</th>
-                    <th scope="col">Дата отправки</th>
-                    <th scope="col">Последняя отправка</th>
-                    <th scope="col">Переодичность</th>
-                    <th scope="col">Статус</th>
-                    <th scope="col">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for newsletter in newsletter_list %}
-                <tr>
-                    <td class="fw-semibold">{{ newsletter.message.title|slice:":20" }}...</td>
-                    <td>{{ newsletter.scheduled_at }}</td>
-                    <td>{{ newsletter.last_run }}</td>
-                    <td>{{ newsletter.get_periodicity_display }}</td>
-                    <td>{{ newsletter.get_status_display }}</td>
-                    <td>
-                        <div class="table-actions">
-                            <a class="btn btn-outline-primary btn-sm"
-                               href="{% url 'newsletter:newsletter_detail' newsletter.pk %}"
-                               role="button">Посмотреть</a>
-                            <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'newsletter:newsletter_update' newsletter.pk %}"
-                               role="button">Редактировать</a>
-                            <a class="btn btn-outline-danger btn-sm"
-                               href="{% url 'newsletter:newsletter_delete' newsletter.pk %}"
-                               role="button">Удалить</a>
-                    </td>
-        </div>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="5">Нет рассылок.</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-    </div>
-</div>
-</div>
-{% endblock %}
-{% block content3 %}
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
-
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="h-100 p-5 bg-body-tertiary rounded-3">
-            <h2>Мои сообщения</h2>
-            <p>Создавайте и редактируйте сообщения для отправки.</p>
-            <a href="{% url 'newsletter:message_create' %}" class="btn btn-primary mb-4" type="button">Добавить
-                сообщение</a>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Тема сообщения</th>
-                    <th scope="col">Количество отправленных</th>
-                    <th scope="col">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for message in message_list %}
-                <tr>
-                    <td class="fw-semibold">{{ message.title|slice:":25" }}...</td>
-                    <td>{{ message.message|slice:":50" }}...</td>
-                    <td>
-                        <div class="table-actions">
-                            <a class="btn btn-outline-primary btn-sm"
-                               href="{% url 'newsletter:message_detail' message.pk %}"
-                               role="button">Посмотреть</a>
-                            <a class="btn btn-outline-secondary btn-sm"
-                               href="{% url 'newsletter:message_update' message.pk %}"
-                               role="button">Редактировать</a>
-                            <a class="btn btn-outline-danger btn-sm"
-                               href="{% url 'newsletter:message_delete' message.pk %}"
-                               role="button">Удалить</a>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4">Нет сообщений.</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-{% endblock %}
+</body>
+</html>
