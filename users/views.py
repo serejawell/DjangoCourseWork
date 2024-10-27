@@ -12,6 +12,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, DetailView
 
 from config import settings
+from users.email_messages import send_welcome_email
 from users.forms import UserRegisterForm, CustomLoginForm, UserProfileForm, PasswordResetForm
 from users.models import User
 
@@ -31,16 +32,7 @@ class RegisterView(CreateView):
         user.save()
         host = self.request.get_host()
         url = f'http://{host}/account/email-confirm/{token}'
-        send_mail(
-            subject='Welcome to the Serega Agency!',
-            message=
-            f'''Hello, {user.first_name} {user.last_name}!
-            Thank you for registering!
-            Link for confirm email: {url}''',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+        send_welcome_email(user, url)
         return super().form_valid(form)
 
 

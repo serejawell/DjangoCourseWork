@@ -31,6 +31,10 @@ class ClientListView(LoginRequiredMixin,ListView):
     '''Контроллер вывода списка клиентов'''
     model = Client
 
+    def get_queryset(self):
+        '''Сортирует пользователей по дате добавления в базу'''
+        return Client.objects.all().order_by('-created_at')
+
 class ClientDetailView(LoginRequiredMixin, DetailView):
     '''Контроллер просмотра клиента'''
     model = Client
@@ -39,20 +43,20 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания клиента'''
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:client_list')
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     '''Контроллер обновления информации о клиенте'''
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:client_list')
 
 
 class ClientDeleteView(LoginRequiredMixin, DeleteView):
     '''Контроллер удаления клиента'''
     model = Client
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:client_list')
 
 
 # NEWSLETTER
@@ -67,20 +71,20 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания рассылок'''
     model = Newsletter
     form_class = NewsletterForm
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:newsletter_list')
 
 
 class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
     '''Контроллер обновления информации о рассылке'''
     model = Newsletter
     form_class = NewsletterForm
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:newsletter_list')
 
 
 class NewsletterDeleteView(LoginRequiredMixin, DeleteView):
     '''Контроллер удаления рассылок'''
     model = Newsletter
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:newsletter_list')
 
 
 class NewsletterDetailView(LoginRequiredMixin, DetailView):
@@ -103,17 +107,17 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания сообщения'''
     model = Message
     fields = ('title', 'message')
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:message_list')
 
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     '''Контроллер обновления сообщения'''
     model = Message
     fields = ('title', 'message',)
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:message_list')
 
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
     '''Контроллер удаления сообщения'''
     model = Message
-    success_url = reverse_lazy('newsletter:personal_account_overview')
+    success_url = reverse_lazy('newsletter:message_list')

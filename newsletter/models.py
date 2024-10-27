@@ -20,7 +20,7 @@ class Client(models.Model):
         unique=True,
         verbose_name='Email'
     )
-    created_at = models.DateField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name='дата создания'
     )
