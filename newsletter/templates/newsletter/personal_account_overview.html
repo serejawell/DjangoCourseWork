@@ -1,0 +1,126 @@
+{% load static %}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <script src="{% static 'js/color-modes.js' %}"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Serega Agency">
+    <title>Личный кабинет - Serega Agency</title>
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-actions .btn {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    {% if user.is_authenticated %}
+    <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom d-flex justify-content-between align-items-center">
+            <a href="{% url 'newsletter:base' %}"
+               class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                <span class="fs-4">Serega Agency</span>
+            </a>
+            <div class="btn btn-group">
+                <a href="{% url 'newsletter:client_list' %}"
+                   class="btn {% if request.path == '/personal_account/clients' %}btn-primary{% else %}btn-outline-primary{% endif %}">Клиенты</a>
+                <a href="{% url 'newsletter:message_list' %}"
+                   class="btn {% if request.path == '/personal_account/messages/' %}btn-primary{% else %}btn-outline-primary{% endif %}">Сообщения</a>
+                <a href="{% url 'newsletter:newsletter_list' %}"
+                   class="btn {% if request.path == '/personal_account/newsletters' %}btn-primary{% else %}btn-outline-primary{% endif %}">Рассылки</a>
+            </div>
+
+
+            <div class="btn btn-group">
+                <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Мой профиль</a>
+                <a href="{% url 'users:logout' %}" class="btn btn-outline-danger">Выход</a>
+            </div>
+        </header>
+        {% else %}
+        <header class="pb-3 mb-4 border-bottom d-flex justify-content-between align-items-center">
+            <a href="{% url 'newsletter:personal_account_overview' %}"
+               class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                <span class="fs-4">Serega Agency</span>
+            </a>
+        </header>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+
+
+        <footer class="pt-3 mt-4 text-body-secondary border-top">
+            &copy; 2024 Serega Agency
+        </footer>
+    </div>
+</main>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

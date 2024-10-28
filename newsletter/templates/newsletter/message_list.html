@@ -1,0 +1,50 @@
+{% extends 'newsletter/personal_account_overview.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="h-100 p-5 bg-body-tertiary rounded-3">
+            <h2>Мои сообщения</h2>
+            <p>Создавайте и редактируйте сообщения для отправки.</p>
+            <a href="{% url 'newsletter:message_create' %}" class="btn btn-primary mb-4" type="button">Добавить
+                сообщение</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Тема сообщения</th>
+                    <th scope="col">Количество отправленных</th>
+                    <th scope="col">Действия</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for message in message_list %}
+                <tr>
+                    <td class="fw-semibold">{{ message.title|slice:":25" }}...</td>
+                    <td>{{ message.message|slice:":50" }}...</td>
+                    <td>
+                        <div class="table-actions">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   href="{% url 'newsletter:message_detail' message.pk %}"
+                                   role="button">Посмотреть</a>
+                                <a class="btn btn-outline-secondary btn-sm"
+                                   href="{% url 'newsletter:message_update' message.pk %}"
+                                   role="button">Редактировать</a>
+                                <a class="btn btn-outline-danger btn-sm"
+                                   href="{% url 'newsletter:message_delete' message.pk %}"
+                                   role="button">Удалить</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">Нет сообщений.</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

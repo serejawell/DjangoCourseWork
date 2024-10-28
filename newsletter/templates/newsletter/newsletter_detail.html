@@ -1,0 +1,48 @@
+{% extends 'newsletter/personal_account_overview.html' %}
+{% block content %}
+{% load static %}
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="mb-3">Информация о рассылке</h2>
+
+                <div class="card mb-3">
+                    <div class="card-header">
+                        Рассылка: {{ newsletter.title }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Сообщение</h5>
+                        <p class="card-text">{{ newsletter.message.message }}</p>
+
+                        <h5 class="card-title">Периодичность</h5>
+                        <p class="card-text">{{ newsletter.get_periodicity_display }}</p>
+
+                        <h5 class="card-title">Дата создания</h5>
+                        <p class="card-text">{{ newsletter.created_at }}</p>
+
+                        <h5 class="card-title">Дата отправки</h5>
+                        <p class="card-text">{{ newsletter.scheduled_at }}</p>
+
+                        <h5 class="card-title">Статус</h5>
+                        <p class="card-text">{{ newsletter.get_status_display }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <h2 class="mb-3">Список клиентов</h2>
+
+                <ul class="list-group">
+                    {% for client in newsletter.clients.all %}
+                        <li class="list-group-item">
+                            {{ client.first_name }} {{ client.last_name }} - {{ client.email }}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Нет клиентов для этой рассылки.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="mb-4">
+          <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-primary" type="button">Назад</a>
+        </div>
+{% endblock %}

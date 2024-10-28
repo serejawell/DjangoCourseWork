@@ -1,0 +1,25 @@
+{% extends 'newsletter/personal_account_overview.html' %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-danger">Удаление сообщения</h2>
+                    <p class="card-text">Вы уверены, что хотите удалить сообщение:</p>
+                    <h5 class="text-primary">{{ message.title }}</h5>
+                    <p>Сообщение: <span class="fw-bold">{{ message.body }}</span></p>
+                    <div class="d-flex justify-content-between mt-4">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                        <a href="{% url 'newsletter:personal_account_overview' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

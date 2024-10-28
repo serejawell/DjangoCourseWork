@@ -1,0 +1,53 @@
+{% extends 'newsletter/base.html' %}
+{% block content %}
+
+
+<div class="container py-4">
+    <header class="pb-3 mb-4 border-bottom">
+        <a href="{% url 'newsletter:base' %}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+            <span class="fs-4">Serega Agency</span>
+        </a>
+    </header>
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-bg-dark rounded-3">
+                <h2>Добавляйте клиентов</h2>
+                <p>Добавление данных клиентов: Возможность легко импортировать списки получателей с контактными
+                    данными для дальнейшей отправки сообщений.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-bg-dark rounded-3">
+                <h2>Создайте сообщение</h2>
+                <p>Создание и настройка рассылок: Создавайте индивидуальные рассылки с уникальным контентом,
+                    настраивайте их внешний вид и содержание.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-5 mt-4 bg-body-tertiary rounded-3">
+        <div class="container-fluid">
+            <h1 class="display-5 fw-bold">Serega Agency</h1>
+            <p class="col-md-8 fs-4">Это удобная платформа, позволяющая клиентам легко управлять и автоматизировать
+                процесс отправки сообщений. Сервис позволяет пользователям загружать данные (например, контактные
+                данные подписчиков), создавать рассылки и настраивать их периодичность. Благодаря гибкой системе
+                настройки, можно запланировать как одноразовые сообщения, так и регулярные рассылки, отправляемые по
+                заданному графику (ежедневно, еженедельно, ежемесячно.)</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'users:profile' %}" class="btn btn-primary btn-lg mt-5"
+               type="button">Перейти в кабинет </a>
+            {% else %}
+            <div class="col-12">
+                <div class="btn btn-group">
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-primary btn-lg mt-5"
+                       type="button">Войти</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg mt-5" type="button">Зарегистрироваться</a>
+                </div>
+                <div class="text-xxl-end">
+                    <a href="" class="text-end btn-link" type="button">Забыли пароль?</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
