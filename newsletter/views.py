@@ -1,10 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
-from newsletter.forms import NewsletterForm, ClientForm
+from newsletter.forms import NewsletterForm, ClientForm, NewsletterManagerForm
 from newsletter.models import Client, Message, Newsletter
 
 
@@ -77,6 +78,14 @@ class NewsletterListView(LoginRequiredMixin, ListView):
         return Newsletter.objects.filter(user=self.request.user)
 
 
+class NewsletterAllListView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
+    '''Контроллер просмотра рассылок'''
+    model = Newsletter
+    permission_required = 'newsletter.can_change_newsletter_status'
+    def get_queryset(self):
+        return Newsletter.objects.all()
+
+
 class NewsletterCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания рассылок'''
     model = Newsletter
@@ -84,10 +93,16 @@ class NewsletterCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('newsletter:newsletter_list')
 
     def get_context_data(self, **kwargs):
-        '''ПО'''
+        '''При создании рассылки показывает только клиентов пользователя'''
         context = super().get_context_data(**kwargs)
         context['clients'] = Client.objects.filter(user=self.request.user)
         return context
+
+    def get_form_kwargs(self):
+        '''Передаем текущего пользователя в форму'''
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Добавляем текущего пользователя
+        return kwargs
 
     def form_valid(self, form):
         '''Привязываем рассылку к пользователю'''
@@ -100,6 +115,16 @@ class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
     model = Newsletter
     form_class = NewsletterForm
     success_url = reverse_lazy('newsletter:newsletter_list')
+
+    def get_form_class(self):
+        '''Возвращаем форму на основе прав пользователя'''
+        if self.request.user == self.get_object().user:
+            return self.form_class
+        elif self.request.user.has_perm('newsletter.set_published'):
+            return NewsletterManagerForm
+        else:
+            raise PermissionDenied
+
 
 
 class NewsletterDeleteView(LoginRequiredMixin, DeleteView):

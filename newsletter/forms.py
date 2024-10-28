@@ -1,5 +1,5 @@
 from django import forms
-from .models import Newsletter, Client
+from .models import Newsletter, Client, Message
 
 
 class StyleFormMixin:
@@ -10,6 +10,9 @@ class StyleFormMixin:
             field.widget.attrs['class'] = 'form-control'
 
 
+from django import forms
+from .models import Newsletter, Client
+
 class NewsletterForm(forms.ModelForm):
     class Meta:
         model = Newsletter
@@ -18,6 +21,24 @@ class NewsletterForm(forms.ModelForm):
             'scheduled_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'clients': forms.CheckboxSelectMultiple(),  # Используем чекбоксы для клиентов
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Получаем текущего пользователя
+        super(NewsletterForm, self).__init__(*args, **kwargs)
+        if user is not None:
+            # Фильтруем клиентов по текущему пользователю
+            self.fields['clients'].queryset = Client.objects.filter(user=user)
+            # Фильтруем сообщения по текущему пользователю
+            self.fields['message'].queryset = Message.objects.filter(user=user)
+
+
+
+
+class NewsletterManagerForm(forms.ModelForm):
+    class Meta:
+        model = Newsletter
+        fields = ['status']
+
 
     def __init__(self, *args, **kwargs):
         super(NewsletterForm, self).__init__(*args, **kwargs)

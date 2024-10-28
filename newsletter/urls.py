@@ -3,7 +3,7 @@ from newsletter.apps import NewsletterConfig
 from newsletter.views import index_view, ClientListView, ClientCreateView, ClientUpdateView, ClientDeleteView, \
     NewsletterListView, PersonalAccountOverviewView, MessageCreateView, MessageDeleteView, MessageUpdateView, \
     NewsletterCreateView, NewsletterDeleteView, NewsletterUpdateView, NewsletterDetailView, MessageDetailView, \
-    ClientDetailView, MessageListView
+    ClientDetailView, MessageListView, NewsletterAllListView
 
 app_name = NewsletterConfig.name
 
@@ -24,6 +24,7 @@ urlpatterns = [
     path('personal_account/delete_message/<int:pk>', MessageDeleteView.as_view(), name='message_delete'),
     #NEWSLETTER
     path('personal_account/newsletters', NewsletterListView.as_view(), name='newsletter_list'),
+    path('personal_account/newsletters_all', NewsletterAllListView.as_view(template_name='newsletter/newsletter_admin_list.html'), name='newsletter_list_all'),
     path('personal_account/newsletter_create', NewsletterCreateView.as_view(), name='newsletter_create'),
     path('personal_account/update_newsletter/<int:pk>', NewsletterUpdateView.as_view(), name='newsletter_update'),
     path('personal_account/delete_newsletter/<int:pk>', NewsletterDeleteView.as_view(), name='newsletter_delete'),

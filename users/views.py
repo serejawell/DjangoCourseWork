@@ -2,14 +2,15 @@ import random
 import secrets
 import string
 
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.checks import messages
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView, View
 
 from config import settings
 from users.email_messages import send_welcome_email
@@ -58,6 +59,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     '''Контроллер для обновления профиля'''
     model = User
@@ -66,6 +68,17 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = User
+    permission_required = 'newsletter.can_change_user_status'
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    context_object_name = 'user'
+
 
 def generate_random_password(length=8):
     '''Функций генерирует рандомный пароль для пользователя'''
@@ -103,3 +116,10 @@ def user_reset_password(request):
 
     # Возврат рендеринга формы вне блока if
     return render(request, 'users/password_reset.html', {'form': form})
+
+
+def toggle_user_status(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_active = not user.is_active  # Меняем статус
+    user.save()
+    return redirect('users:user_list')  # Возвращаемся к списку пользователей

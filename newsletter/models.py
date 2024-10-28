@@ -82,6 +82,7 @@ class Newsletter(models.Model):
         ('created', 'Создана'),
         ('started', 'Запущена'),
         ('completed', 'Завершена'),
+        ('stopped','Остановлена')
     ]
 
     PERIOD_CHOICES = [
@@ -135,6 +136,9 @@ class Newsletter(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+        permissions = [
+            ('can_change_newsletter_status', 'Can change newsletter status'),
+        ]
 
 
 class NewsletterAttempt(models.Model):
