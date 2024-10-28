@@ -23,7 +23,7 @@ urlpatterns = [
     path('personal_account/update_message/<int:pk>', MessageUpdateView.as_view(), name='message_update'),
     path('personal_account/delete_message/<int:pk>', MessageDeleteView.as_view(), name='message_delete'),
     #NEWSLETTER
-    path('personal_account/newsletter_list', NewsletterListView.as_view(), name='newsletter_list'),
+    path('personal_account/newsletters', NewsletterListView.as_view(), name='newsletter_list'),
     path('personal_account/newsletter_create', NewsletterCreateView.as_view(), name='newsletter_create'),
     path('personal_account/update_newsletter/<int:pk>', NewsletterUpdateView.as_view(), name='newsletter_update'),
     path('personal_account/delete_newsletter/<int:pk>', NewsletterDeleteView.as_view(), name='newsletter_delete'),

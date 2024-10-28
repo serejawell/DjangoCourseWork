@@ -4,18 +4,19 @@ from users.models import User
 
 
 class Command(BaseCommand):
-    help = 'Create superuser'
+    help = 'Create manager user'
 
     def handle(self, *args, **options):
         user = User.objects.create(
-            email='admin',
-            first_name='Admin',
-            last_name='Adminov',
+            email='manager',
+            first_name='manager',
+            last_name='managerov',
+            is_authenticated=True,
             is_staff=True,
-            is_superuser=True,
+            is_superuser=False,
         )
 
         user.set_password('1234')
         user.save()
         self.stdout.write(self.style.SUCCESS(
-            f'Successfully created superuser with email: {user.email}, password: 1234.'))
+            f'Successfully created manager with email: {user.email}, password: 1234.'))

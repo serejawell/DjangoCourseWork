@@ -1,9 +1,16 @@
 from django.db import models
 from django.utils import timezone
 
+from config import settings
+
 
 class Client(models.Model):
     '''Модель клиента представляет собой контактные данные о человеке, который должен будет получать рассылки'''
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
     first_name = models.CharField(
         max_length=50,
         verbose_name='Имя клиента',
@@ -37,7 +44,6 @@ class Client(models.Model):
         verbose_name = 'клиент'
         verbose_name_plural = 'клиенты'
 
-
     def __str__(self):
         return (f'{self.last_name} {self.first_name} {self.middle_name} ({self.email})')
 
@@ -47,6 +53,12 @@ class Client(models.Model):
 
 
 class Message(models.Model):
+    '''Модель сообщения'''
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
     title = models.CharField(
         max_length=50,
         verbose_name='тема сообщения'
@@ -77,6 +89,12 @@ class Newsletter(models.Model):
         ('week', 'Раз в неделю'),
         ('month', 'Раз в месяц'),
     ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
 
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -111,7 +129,6 @@ class Newsletter(models.Model):
         verbose_name='Клиенты',
     )
 
-
     def __str__(self):
         return (f'ID: {self.id} Дата отправки: {self.scheduled_at} Статуc: {self.status}')
 
@@ -121,6 +138,7 @@ class Newsletter(models.Model):
 
 
 class NewsletterAttempt(models.Model):
+    '''Модель попытки рассылки'''
     STATUS_CHOICES = [
         ('success', 'Успешно'),
         ('failure', 'Неуспешно'),

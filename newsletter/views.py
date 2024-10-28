@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
@@ -27,23 +27,30 @@ class PersonalAccountOverviewView(TemplateView):
 
 # CLIENT
 
-class ClientListView(LoginRequiredMixin,ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     '''Контроллер вывода списка клиентов'''
     model = Client
 
     def get_queryset(self):
-        '''Сортирует пользователей по дате добавления в базу'''
-        return Client.objects.all().order_by('-created_at')
+        '''Возвращает список клиентов текущего пользователя, отсортированный по дате добавления'''
+        return Client.objects.filter(user=self.request.user).order_by('-created_at')
+
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
     '''Контроллер просмотра клиента'''
     model = Client
+
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания клиента'''
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('newsletter:client_list')
+
+    def form_valid(self, form):
+        '''Привязываем клиента к пользователю'''
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
@@ -66,12 +73,26 @@ class NewsletterListView(LoginRequiredMixin, ListView):
     '''Контроллер просмотра рассылок'''
     model = Newsletter
 
+    def get_queryset(self):
+        return Newsletter.objects.filter(user=self.request.user)
+
 
 class NewsletterCreateView(LoginRequiredMixin, CreateView):
     '''Контроллер создания рассылок'''
     model = Newsletter
     form_class = NewsletterForm
     success_url = reverse_lazy('newsletter:newsletter_list')
+
+    def get_context_data(self, **kwargs):
+        '''ПО'''
+        context = super().get_context_data(**kwargs)
+        context['clients'] = Client.objects.filter(user=self.request.user)
+        return context
+
+    def form_valid(self, form):
+        '''Привязываем рассылку к пользователю'''
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
@@ -98,6 +119,10 @@ class MessageListView(LoginRequiredMixin, ListView):
     '''Контроллер просмотра сообщений'''
     model = Message
 
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
+
+
 class MessageDetailView(LoginRequiredMixin, DetailView):
     '''Контроллер просмотра информации о сообщении'''
     model = Message
@@ -108,6 +133,11 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     fields = ('title', 'message')
     success_url = reverse_lazy('newsletter:message_list')
+
+    def form_valid(self, form):
+        '''Привязываем сообщение к пользователю'''
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):

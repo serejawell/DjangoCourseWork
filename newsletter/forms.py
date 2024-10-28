@@ -16,7 +16,15 @@ class NewsletterForm(forms.ModelForm):
         fields = ['message', 'scheduled_at', 'periodicity', 'clients']
         widgets = {
             'scheduled_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'clients': forms.CheckboxSelectMultiple(),  # Используем чекбоксы для клиентов
         }
+
+    def __init__(self, *args, **kwargs):
+        super(NewsletterForm, self).__init__(*args, **kwargs)
+        # Применяем класс к полям, кроме clients
+        for field_name in self.fields:
+            if field_name != 'clients':
+                self.fields[field_name].widget.attrs.update({'class': 'form-control'})
 
 
 class ClientForm(StyleFormMixin, forms.ModelForm):

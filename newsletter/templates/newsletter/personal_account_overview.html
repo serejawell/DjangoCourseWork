@@ -86,12 +86,18 @@
                 <span class="fs-4">Serega Agency</span>
             </a>
             <div class="btn btn-group">
-                <a href="{% url 'newsletter:client_list' %}" class="btn btn-outline-primary">Клиенты</a>
-                <a href="{% url 'newsletter:message_list' %}" class="btn btn-outline-primary">Сообщения</a>
-                <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-outline-primary">Рассылки</a>
+                <a href="{% url 'newsletter:client_list' %}"
+                   class="btn {% if request.path == '/personal_account/clients' %}btn-primary{% else %}btn-outline-primary{% endif %}">Клиенты</a>
+                <a href="{% url 'newsletter:message_list' %}"
+                   class="btn {% if request.path == '/personal_account/messages/' %}btn-primary{% else %}btn-outline-primary{% endif %}">Сообщения</a>
+                <a href="{% url 'newsletter:newsletter_list' %}"
+                   class="btn {% if request.path == '/personal_account/newsletters' %}btn-primary{% else %}btn-outline-primary{% endif %}">Рассылки</a>
             </div>
+
+
             <div class="btn btn-group">
                 <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Мой профиль</a>
+                <a href="{% url 'users:logout' %}" class="btn btn-outline-danger">Выход</a>
             </div>
         </header>
         {% else %}

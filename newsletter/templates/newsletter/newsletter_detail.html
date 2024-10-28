@@ -1,14 +1,6 @@
 {% extends 'newsletter/personal_account_overview.html' %}
 {% block content %}
 {% load static %}
-    <div class="container py-4">
-        <header class="pb-3 mb-4 border-bottom">
-            <a href="{% url 'newsletter:personal_account_overview' %}"
-               class="d-flex align-items-center text-body-emphasis text-decoration-none">
-                <span class="fs-4">Детали рассылки</span>
-            </a>
-        </header>
-
         <div class="row">
             <div class="col-md-8">
                 <h2 class="mb-3">Информация о рассылке</h2>
@@ -51,6 +43,6 @@
             </div>
         </div>
         <div class="mb-4">
-          <a href="{% url 'newsletter:personal_account_overview' %}" class="btn btn-primary" type="button">Назад</a>
+          <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-primary" type="button">Назад</a>
         </div>
 {% endblock %}
