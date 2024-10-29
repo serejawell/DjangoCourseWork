@@ -1,4 +1,5 @@
 {% extends 'newsletter/personal_account_overview.html' %}
+{% load newsletter_extras %}
 {% block content %}
 <div class="row mb-4">
     <div class="col-md-12">
@@ -7,6 +8,8 @@
             <p>Просматривайте статистику по отправленным и запланированным рассылкам.</p>
             <a href="{% url 'newsletter:newsletter_create' %}" class="btn btn-primary mb-4" type="button">Добавить
                 рассылку</a>
+            <p>Всего рассылок: {{ user.newsletter_set.count }}</p>
+            <p>Активных рассылок: {{ user|active_newsletters_count }}</p>
             <table class="table">
                 <thead>
                 <tr>
