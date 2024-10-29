@@ -11,7 +11,7 @@ class Command(BaseCommand):
             email='user',
             first_name='User',
             last_name='Userov',
-            is_authenticated=True,
+            is_active=True,
             is_staff=False,
             is_superuser=False,
         )
