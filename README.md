@@ -27,11 +27,13 @@
 Клонируем репозиторий :git clone <url>
 Активируем виртуальное окружение: python3 -m venv env
 Устанавливаем из requirements.txt совместимости: pip install -r requirements.txt
+
 БЫСТРЫЕ КОМАНДЫ:
 
 python3 manage.py csu - Создает суперюзера с данными: email - admin, password - 1234 
 python3 manage.py man - Создает менеджера с данными: email - manager, password - 1234 
 python3 manage.py user - Создает суперюзера с данными: email - user, password - 1234 
+python3 manage.py send_newsletter запускает рассылку
 
 ЧТО МОЖЕТ:?
 Админ: - Все права сервиса
@@ -46,3 +48,4 @@ python3 manage.py user - Создает суперюзера с данными: 
 2) Использование:
 Регистрация на сервисе происходит через подтверждение электронной почты. 
 Далее дается доступ в Личный кабинет, в котором пользователь может редактировать клиентов, сообщения и рассылки
+

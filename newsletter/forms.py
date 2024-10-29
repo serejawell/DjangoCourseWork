@@ -13,10 +13,11 @@ class StyleFormMixin:
 from django import forms
 from .models import Newsletter, Client
 
+
 class NewsletterForm(forms.ModelForm):
     class Meta:
         model = Newsletter
-        fields = ['message', 'scheduled_at', 'periodicity', 'clients']
+        fields = ['message', 'scheduled_at', 'periodicity', 'clients','status']
         widgets = {
             'scheduled_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'clients': forms.CheckboxSelectMultiple(),  # Используем чекбоксы для клиентов
@@ -32,13 +33,10 @@ class NewsletterForm(forms.ModelForm):
             self.fields['message'].queryset = Message.objects.filter(user=user)
 
 
-
-
 class NewsletterManagerForm(forms.ModelForm):
     class Meta:
         model = Newsletter
         fields = ['status']
-
 
     def __init__(self, *args, **kwargs):
         super(NewsletterForm, self).__init__(*args, **kwargs)
@@ -51,6 +49,4 @@ class NewsletterManagerForm(forms.ModelForm):
 class ClientForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Client
-        fields = ('first_name', 'last_name', 'middle_name','email',)
-
-
+        fields = ('last_name', 'first_name', 'middle_name', 'email',)

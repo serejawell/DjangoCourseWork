@@ -1,17 +1,30 @@
+from random import sample
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
+from blog.models import Post
 from newsletter.forms import NewsletterForm, ClientForm, NewsletterManagerForm
 from newsletter.models import Client, Message, Newsletter
 
 
-def index_view(request):
-    '''Базовый приветственный шаблон сайта'''
-    return render(request, 'newsletter/base_welcome.html')
+class HomePageView(TemplateView):
+    template_name = 'newsletter/base_welcome.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_posts = list(Post.objects.all())
+        context['random_posts'] = sample(all_posts, min(len(all_posts), 3))  # Случайные посты
+        # Добавляем количество уникальных клиентов
+        context['total_clients'] = Client.objects.aggregate(total=Count('id'))['total']
+
+        return context
 
 
 class PersonalAccountOverviewView(TemplateView):
@@ -75,15 +88,23 @@ class NewsletterListView(LoginRequiredMixin, ListView):
     model = Newsletter
 
     def get_queryset(self):
-        return Newsletter.objects.filter(user=self.request.user)
+        return Newsletter.objects.filter(user=self.request.user).order_by('-created_at')
 
 
 class NewsletterAllListView(PermissionRequiredMixin, LoginRequiredMixin, ListView):
     '''Контроллер просмотра рассылок'''
     model = Newsletter
     permission_required = 'newsletter.can_change_newsletter_status'
+
     def get_queryset(self):
-        return Newsletter.objects.all()
+        return Newsletter.objects.all().order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        '''Для менеджеров/админов, позволять изменять статус рассылки'''
+        context = super().get_context_data(**kwargs)
+        # Проверяем, есть ли у пользователя право изменять статус рассылки
+        context['can_change_status'] = self.request.user.has_perm('newsletter.can_change_newsletter_status')
+        return context
 
 
 class NewsletterCreateView(LoginRequiredMixin, CreateView):
@@ -116,6 +137,18 @@ class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
     form_class = NewsletterForm
     success_url = reverse_lazy('newsletter:newsletter_list')
 
+    def get_context_data(self, **kwargs):
+        '''При создании рассылки показывает только клиентов пользователя'''
+        context = super().get_context_data(**kwargs)
+        context['clients'] = Client.objects.filter(user=self.request.user)
+        return context
+
+    def get_form_kwargs(self):
+        '''Передаем текущего пользователя в форму'''
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Добавляем текущего пользователя
+        return kwargs
+
     def get_form_class(self):
         '''Возвращаем форму на основе прав пользователя'''
         if self.request.user == self.get_object().user:
@@ -124,7 +157,6 @@ class NewsletterUpdateView(LoginRequiredMixin, UpdateView):
             return NewsletterManagerForm
         else:
             raise PermissionDenied
-
 
 
 class NewsletterDeleteView(LoginRequiredMixin, DeleteView):

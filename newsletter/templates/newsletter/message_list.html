@@ -11,7 +11,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Тема сообщения</th>
-                    <th scope="col">Количество отправленных</th>
+                    <th scope="col">Сообщение</th>
                     <th scope="col">Действия</th>
 
                 </tr>
@@ -19,8 +19,8 @@
                 <tbody>
                 {% for message in message_list %}
                 <tr>
-                    <td class="fw-semibold">{{ message.title|slice:":25" }}...</td>
-                    <td>{{ message.message|slice:":50" }}...</td>
+                    <td class="fw-semibold">{{ message.title|slice:":35" }}</td>
+                    <td>{{ message.message|slice:":60" }}</td>
                     <td>
                         <div class="table-actions">
                             <div class="btn-group" role="group" aria-label="Basic example">

@@ -24,7 +24,7 @@ class Client(models.Model):
         verbose_name='Отчество клиента',
     )
     email = models.EmailField(
-        unique=True,
+        unique=False,
         verbose_name='Email'
     )
     created_at = models.DateTimeField(
@@ -82,7 +82,6 @@ class Newsletter(models.Model):
         ('created', 'Создана'),
         ('started', 'Запущена'),
         ('completed', 'Завершена'),
-        ('stopped','Остановлена')
     ]
 
     PERIOD_CHOICES = [

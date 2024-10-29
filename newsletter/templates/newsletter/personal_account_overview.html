@@ -2,8 +2,6 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 <head>
-    <script src="{% static 'js/color-modes.js' %}"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
@@ -96,6 +94,7 @@
 
 
             <div class="btn btn-group">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-outline-dark">Блог</a>
                 <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Мой профиль</a>
                 <a href="{% url 'users:logout' %}" class="btn btn-outline-danger">Выход</a>
             </div>
