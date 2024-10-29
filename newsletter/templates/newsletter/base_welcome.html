@@ -1,5 +1,7 @@
 {% extends 'newsletter/base.html' %}
 {% block content %}
+{% load newsletter_extras %}
+
 
 <div class="container py-4">
     <header class="pb-3 mb-4 border-bottom">
@@ -37,6 +39,9 @@
             <!-- Новый блок с количеством уникальных клиентов -->
             <div class="mt-4">
                 <h3>Всего уникальных клиентов на сервисе: {{ total_clients }}</h3>
+                <h3>Всего рассылок: {{ newsletter_all.count }}</h3>
+                <h3>Активных рассылок: {{ active_newsletters_count }}</h3>
+                
             </div>
 
             {% if user.is_authenticated %}
@@ -44,40 +49,42 @@
             {% else %}
             <div class="col-12">
                 <div class="btn btn-group">
-                    <a href="{% url 'users:login' %}" class="btn btn-outline-primary btn-lg mt-5" type="button">Войти</a>
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-primary btn-lg mt-5"
+                       type="button">Войти</a>
                     <a href="{% url 'users:register' %}" class="btn btn-primary btn-lg mt-5" type="button">Зарегистрироваться</a>
                 </div>
                 <div class="text-xxl-end">
-                    <a href="{% url 'users:password_reset' %}" class="text-end btn-link" type="button">Забыли пароль?</a>
+                    <a href="{% url 'users:password_reset' %}" class="text-end btn-link" type="button">Забыли
+                        пароль?</a>
                 </div>
             </div>
             {% endif %}
         </div>
     </div>
 
-<div class="mt-5">
-    <h2 class="text-center mb-4">Вам также может быть интересно</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for post in random_posts %}
-        <div class="col">
-            <div class="card h-100 text-white shadow-lg border-0 overflow-hidden position-relative"
-                 style="transition: transform 0.3s; border-radius: 15px;">
-                {% if post.image %}
-                <img src="{{ post.image.url }}" class="card-img h-100" alt="{{ post.title }}"
-                     style="filter: brightness(70%); object-fit: cover;">
-                {% endif %}
-                <div class="card-img-overlay d-flex flex-column justify-content-end"
-                     style="background: rgba(0, 0, 0, 0.5);">
-                    <h5 class="card-title fw-bold mb-2" style="font-size: 1.25rem;">{{ post.title }}</h5>
-                    <p class="card-text mb-3" style="font-size: 0.9rem;">{{ post.content|truncatewords:15 }}</p>
-                    <a href="{% url 'blog:post_detail' post.pk %}" class="stretched-link text-decoration-none"
-                       style="color: #ffdd57;">Читать далее &rarr;</a>
+    <div class="mt-5">
+        <h2 class="text-center mb-4">Вам также может быть интересно</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for post in random_posts %}
+            <div class="col">
+                <div class="card h-100 text-white shadow-lg border-0 overflow-hidden position-relative"
+                     style="transition: transform 0.3s; border-radius: 15px;">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" class="card-img h-100" alt="{{ post.title }}"
+                         style="filter: brightness(70%); object-fit: cover;">
+                    {% endif %}
+                    <div class="card-img-overlay d-flex flex-column justify-content-end"
+                         style="background: rgba(0, 0, 0, 0.5);">
+                        <h5 class="card-title fw-bold mb-2" style="font-size: 1.25rem;">{{ post.title }}</h5>
+                        <p class="card-text mb-3" style="font-size: 0.9rem;">{{ post.content|truncatewords:15 }}</p>
+                        <a href="{% url 'blog:post_detail' post.pk %}" class="stretched-link text-decoration-none"
+                           style="color: #ffdd57;">Читать далее &rarr;</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 
 
-{% endblock %}
+    {% endblock %}

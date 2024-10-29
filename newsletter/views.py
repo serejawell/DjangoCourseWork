@@ -16,13 +16,19 @@ from newsletter.models import Client, Message, Newsletter
 class HomePageView(TemplateView):
     template_name = 'newsletter/base_welcome.html'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # Получаем случайные посты
         all_posts = list(Post.objects.all())
         context['random_posts'] = sample(all_posts, min(len(all_posts), 3))  # Случайные посты
+
         # Добавляем количество уникальных клиентов
         context['total_clients'] = Client.objects.aggregate(total=Count('id'))['total']
+
+        # Добавляем информацию о рассылках
+        context['newsletter_all'] = Newsletter.objects.all()  # Все рассылки
+        context['active_newsletters_count'] = Newsletter.objects.filter(status='started').count()  # Активные рассылки
 
         return context
 
