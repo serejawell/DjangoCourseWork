@@ -1,5 +1,5 @@
+from blog.services import get_posts_from_cache
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 
@@ -12,6 +12,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostListView(ListView):
     model = Post
+
+    def get_queryset(self):
+        return get_posts_from_cache()
 
 class PostDetailView(DetailView):
     model = Post
