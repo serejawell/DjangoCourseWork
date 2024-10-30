@@ -20,7 +20,7 @@ class UserRegisterForm(StyleFormMixin, UserCreationForm):
 class UserProfileForm(StyleFormMixin, UserChangeForm):
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'avatar']
+        fields = ['first_name', 'last_name', 'avatar']
 
 class CustomLoginForm(StyleFormMixin  ,AuthenticationForm):
     pass
